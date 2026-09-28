@@ -1,0 +1,23 @@
+set(MIOSIX_SYCL_BENCH_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/syclbench.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/2mm.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/3mm.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/atax.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/bicg.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/convolution-2d.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/convolution-3d.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/correlation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/covariance.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/gemm.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/gesummv.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/gramschmidt.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/mvt.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/syr2k.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/syrk.cpp
+)
+
+set(MIOSIX_SYCL_BENCH_INCLUDE_DIRS
+    ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/include
+    ${CMAKE_CURRENT_LIST_DIR}/polybench/common
+)
