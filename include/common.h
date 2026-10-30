@@ -37,7 +37,7 @@ public:
     template<typename F>
     sycl::event submit(F&& f)
     {
-        return queue().submit(std::forward<F>(f), std::nullopt);
+        return queue().submit(std::forward<F>(f));
     }
 
 private:
