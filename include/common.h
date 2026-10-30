@@ -23,6 +23,8 @@
 
 #if THERMAL_CAMERA_FRAME_PROCESS_VARIANT == THERMAL_CAMERA_FRAME_PROCESS_SYRTOS
 namespace syrtos::sycl {
+#else
+namespace sycl {
 #endif
 using std::sqrt;
 
@@ -33,9 +35,7 @@ id<Dimensions> operator+(const id<Dimensions>& a,const id<Dimensions>& b)
     for(size_t i=0;i<Dimensions;i++) result[i]=a[i]+b[i];
     return id<Dimensions>(result);
 }
-#if THERMAL_CAMERA_FRAME_PROCESS_VARIANT == THERMAL_CAMERA_FRAME_PROCESS_SYRTOS
 }
-#endif
 
 struct VerificationSetting {};
 
