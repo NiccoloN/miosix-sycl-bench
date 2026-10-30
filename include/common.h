@@ -43,8 +43,18 @@ public:
 private:
     static sycl::queue& queue()
     {
+        #if THERMAL_CAMERA_FRAME_PROCESS_VARIANT == THERMAL_CAMERA_FRAME_PROCESS_ACPP
         static sycl::queue instance;
         return instance;
+        #else
+        using namespace syrtos::sycl;
+        #ifdef SCHED_TYPE_EDF
+            static sycl::queue queue{queue_properties<queue_mode::DEADLINE>{}};
+        #else
+            static sycl::queue queue{queue_properties<queue_mode::PRIORITY>{}};
+        #endif
+        return queue;
+        #endif
     }
 };
 
