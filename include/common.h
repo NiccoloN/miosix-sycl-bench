@@ -13,11 +13,17 @@
 #include <utility>
 #include <vector>
 
+#define THERMAL_CAMERA_FRAME_PROCESS_SERIAL 0
+#define THERMAL_CAMERA_FRAME_PROCESS_ACPP   1
+#define THERMAL_CAMERA_FRAME_PROCESS_SYRTOS 2
+
 #ifndef NUM_RUNS
 #define NUM_RUNS 5
 #endif
 
+#if THERMAL_CAMERA_FRAME_PROCESS_VARIANT == THERMAL_CAMERA_FRAME_PROCESS_SYRTOS
 namespace syrtos::sycl {
+#endif
 using std::sqrt;
 
 template<size_t Dimensions>
@@ -27,7 +33,9 @@ id<Dimensions> operator+(const id<Dimensions>& a,const id<Dimensions>& b)
     for(size_t i=0;i<Dimensions;i++) result[i]=a[i]+b[i];
     return id<Dimensions>(result);
 }
+#if THERMAL_CAMERA_FRAME_PROCESS_VARIANT == THERMAL_CAMERA_FRAME_PROCESS_SYRTOS
 }
+#endif
 
 struct VerificationSetting {};
 
