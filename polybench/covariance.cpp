@@ -110,8 +110,7 @@ public:
 
     events.push_back(args.device_queue.submit([&](handler& cgh) {
       auto data = data_buffer.get_access<access::mode::read>(cgh);
-      auto symmat = symmat_buffer.get_access<access::mode::write>(cgh);
-      auto symmat2 = symmat_buffer.get_access<access::mode::write>(cgh);
+      auto symmat = symmat_buffer.get_access<access::mode::read_write>(cgh);
 
       cgh.parallel_for(range<1>(size), [=, M_ = size, N_ = size](id<1> gid) {
         const id<1> offset(1);
@@ -125,7 +124,7 @@ public:
             symmat[{j1, j2}] += data[{i, j1}] * data[{i, j2}];
           }
 
-          symmat2[{j2, j1}] = symmat[{j1, j2}];
+          symmat[{j2, j1}] = symmat[{j1, j2}];
         }
       });
     }));
