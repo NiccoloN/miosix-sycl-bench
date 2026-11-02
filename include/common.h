@@ -135,8 +135,9 @@ public:
             for(auto& event: events) event.wait();
             const auto after=std::chrono::steady_clock::now();
             const auto us=std::chrono::duration_cast<std::chrono::microseconds>(after-before).count();
-            std::printf("[syclbench] run=%u time=%lld.%03lld ms\n",
-                        static_cast<unsigned>(run+1),us/1000,us%1000);
+            #ifdef SYCLBENCH_LOG_PROFILING
+            std::printf("[syclbench] run=%u time=%lld.%03lld ms\n",static_cast<unsigned>(run+1),us/1000,us%1000);
+            #endif
         }
     }
 

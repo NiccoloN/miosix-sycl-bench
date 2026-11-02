@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <iostream>
 
+int benchmarkCount=0;
+
 namespace {
 
 using BenchFunction=int (*)(int,char **);
@@ -45,9 +47,14 @@ void runSyclBench()
             std::snprintf(sizeArgument,sizeof(sizeArgument),"--size=%d",benchmark.size);
             char program[]="syclbench";
             char *argv[]={program,sizeArgument,nullptr};
+            #ifdef SYCLBENCH_LOG_PROFILING
             std::printf("[syclbench] benchmark=%s size=%d\n",benchmark.name,benchmark.size);
+            #endif
             benchmark.function(2,argv);
+            #ifdef SYCLBENCH_LOG_PROFILING
             std::puts("[syclbench] complete");
+            #endif
+            benchmarkCount++;
         }
         i = 0;
     }
