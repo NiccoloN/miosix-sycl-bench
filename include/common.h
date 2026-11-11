@@ -12,6 +12,7 @@
 #include <optional>
 #include <utility>
 #include <vector>
+#include "syclbench.h"
 
 #define THERMAL_CAMERA_FRAME_PROCESS_SERIAL 0
 #define THERMAL_CAMERA_FRAME_PROCESS_ACPP   1
@@ -49,6 +50,14 @@ public:
     }
 
 private:
+    static constexpr cpu_set_t benchmarkCpuSet() {
+        cpu_set_t result;
+        CPU_ZERO(&result);
+        if(syclBenchCoreMask&0b1) CPU_SET(0,&result);
+        if(syclBenchCoreMask&0b10) CPU_SET(1,&result);
+        return result;
+    }
+
     static sycl::queue& queue()
     {
         #if THERMAL_CAMERA_FRAME_PROCESS_VARIANT == THERMAL_CAMERA_FRAME_PROCESS_ACPP
@@ -57,9 +66,9 @@ private:
         #else
         using namespace syrtos::sycl;
         #ifdef SCHED_TYPE_EDF
-            static sycl::queue queue{queue_properties<queue_mode::DEADLINE>{}};
+            static sycl::queue queue{queue_properties<queue_mode::DEADLINE,syrtos::sycl::no_priority,benchmarkCpuSet()>{}};
         #else
-            static sycl::queue queue{queue_properties<queue_mode::PRIORITY>{}};
+            static sycl::queue queue{queue_properties<queue_mode::PRIORITY,syrtos::priority::low,benchmarkCpuSet()>{}};
         #endif
         return queue;
         #endif
@@ -130,12 +139,14 @@ public:
             Benchmark benchmark(args);
             benchmark.setup();
             std::vector<sycl::event> events;
+            #ifdef SYCLBENCH_LOG_PROFILING
             const auto before=std::chrono::steady_clock::now();
+            #endif
             benchmark.run(events);
             for(auto& event: events) event.wait();
+            #ifdef SYCLBENCH_LOG_PROFILING
             const auto after=std::chrono::steady_clock::now();
             const auto us=std::chrono::duration_cast<std::chrono::microseconds>(after-before).count();
-            #ifdef SYCLBENCH_LOG_PROFILING
             std::printf("[syclbench] run=%u time=%lld.%03lld ms\n",static_cast<unsigned>(run+1),us/1000,us%1000);
             #endif
         }
