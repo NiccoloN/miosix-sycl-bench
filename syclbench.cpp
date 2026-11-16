@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <iostream>
 
-volatile int benchmarkCount=0;
+int benchmarkCount=0;
 
 namespace {
 
