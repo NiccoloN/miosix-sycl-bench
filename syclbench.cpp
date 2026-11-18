@@ -3,7 +3,7 @@
 #include "polybench/common/benchmarks.hpp"
 
 #include <cstdio>
-#include <iostream>
+#include <miosix.h>
 
 int benchmarkCount=0;
 
@@ -39,9 +39,10 @@ constexpr Benchmark benchmarks[]={
 
 void runSyclBench()
 {
-    unsigned i=0;
-    while (true) {
-        for(;i<std::size(benchmarks);i++) {
+   for(;;)
+   {
+        for(unsigned int i=0;i<std::size(benchmarks);i++)
+        {
             const auto& benchmark=benchmarks[i];
             char sizeArgument[24];
             std::snprintf(sizeArgument,sizeof(sizeArgument),"--size=%d",benchmark.size);
@@ -55,7 +56,7 @@ void runSyclBench()
             std::puts("[syclbench] complete");
             #endif
             benchmarkCount++;
+            if(miosix::Thread::testTerminate()) return;
         }
-        i = 0;
     }
 }
